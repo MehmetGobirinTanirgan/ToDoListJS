@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>To-Do List</title>
+</head>
+
+<body>
+    <div class="container" style="margin-top:20px;">
+        <div class="card row">
+            <div class="card-header">To-Do List</div>
+            <div class="card-body">
+                <form id="todo-form" name="form">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input class="form-control" type="text" name="todo" id="todo" placeholder="Enter a To-Do">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Add New To-Do</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <hr>
+                <h5 class="card-title" id="tasks-title">To-Do List</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input class="form-control" type="text" name="filter" id="filter" placeholder="Search">
+                    </div>
+                </div>
+                <hr>
+                <ul class="list-group">
+                    <!--<li class="list-group-item d-flex justify-content-between">
+                        Todo 1
+                        <a href="#" class="delete-item">
+                            <i class="fa fa-remove"></i>
+                        </a>
+                    </li> -->
+                </ul>
+                <hr>
+                <a id="clear-todos" class="btn btn-dark" href="#">Clear All</a>
+            </div>
+        </div>
+    </div>
+    <script src="JS/ToDoList.js" async></script>
+</body>
+
+</html>
