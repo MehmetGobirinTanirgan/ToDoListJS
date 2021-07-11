@@ -1,6 +1,6 @@
-const form = document.querySelector("#todo-form");
+const form = document.getElementById("todo-form");
 
-const todoInput = document.querySelector("#todo");
+const todoInput = document.getElementById("todo");
 
 const todoList = document.querySelector(".list-group");
 
@@ -8,26 +8,38 @@ const firstCardBody = document.querySelectorAll(".card-body")[0];
 
 const secondCardBody = document.querySelectorAll(".card-body")[1];
 
-const filter = document.querySelector("#filter");
+const filter = document.getElementById("filter");
 
-const clearButton = document.querySelector("#clear-todos");
+const clearButton = document.getElementById("clear-todos");
+
+const btnMsgGroup = document.getElementById("btn-msg-group");
 
 
 eventListeners();
 
 function eventListeners() {
     form.addEventListener("submit", addToDo);
-    document.addEventListener("DOMContentLoaded", loadAllTodosToUI);
+
+    if(document.readyState !== 'loading') {
+        loadAllTodosToUI();
+    }
+    else {
+        document.addEventListener('DOMContentLoaded',loadAllTodosToUI)
+    }
+    
     secondCardBody.addEventListener("click", deleteTodo);
     filter.addEventListener("keyup", filterTodos);
+    todoList.addEventListener("click",toggleStatus);
     clearButton.addEventListener("click", clearAllTodos);
+    
 };
 
 
 function addToDo(e) {
-    const newtodo = todoInput.value.trim();
-    if (newtodo === "") {
-        showAlert("danger", "Please enter a value!");
+    const toDoValue = todoInput.value.trim();
+    const newtodo = {value: toDoValue, isItDone:false};
+    if (toDoValue === "") {
+        showAlert("danger", "Please type a to-do!");
     } else {
         addToDoUI(newtodo);
         showAlert("success", "Successfully Added!");
@@ -37,12 +49,20 @@ function addToDo(e) {
 
 function addToDoUI(newtodo) {
     const listItem = document.createElement("li");
-    listItem.className = "list-group-item d-flex justify-content-between";
+    listItem.className = "list-group-item d-flex align-items-center justify-content-between";
+    const div = document.createElement("div");
     const link = document.createElement("a");
     link.href = "#";
     link.className = "delete-item";
     link.innerHTML = "<i class= 'fas fa-trash'></i>";
-    listItem.appendChild(document.createTextNode(newtodo));
+    div.appendChild(document.createTextNode(newtodo.value));
+    if(newtodo.isItDone){
+        listItem.className += " list-group-item-success";
+        const checkIcon = document.createElement("i");
+        checkIcon.className = "fas fa-check fa-lg ml-2";
+        div.appendChild(checkIcon);
+    }
+    listItem.appendChild(div);
     listItem.appendChild(link);
     todoList.appendChild(listItem);
     todoInput.value = "";
@@ -52,8 +72,14 @@ function addToDoUI(newtodo) {
 function updateStorage() {
     const listarray = [];
     const listItems = document.querySelectorAll(".list-group-item");
+
     listItems.forEach(function(item) {
-        listarray.push(item.textContent);
+        if(item.classList.contains("list-group-item-success")){
+            listarray.push({value: item.textContent, isItDone:true});
+        }
+        else{
+            listarray.push({value: item.textContent, isItDone:false});
+        }       
     });
 
     localStorage.setItem("todos", JSON.stringify(listarray));
@@ -106,11 +132,28 @@ function clearAllTodos(e) {
     }
 }
 
+function toggleStatus(e){
+    if(e.target.classList.contains("list-group-item")){
+        if(e.target.classList.contains("list-group-item-success")){
+            e.target.className = "list-group-item d-flex align-items-center justify-content-between";
+            e.target.firstElementChild.lastElementChild.remove();
+        }
+        else{
+            e.target.className += " list-group-item-success";
+            const checkIcon = document.createElement("i");
+            checkIcon.className = "fas fa-check fa-lg ml-2";
+            e.target.firstElementChild.appendChild(checkIcon);
+        }
+        updateStorage();
+    }   
+}
+
 function showAlert(type, message) {
     const alert = document.createElement("div");
-    alert.className = `alert alert-${type}`;
+    alert.className = `alert alert-${type} ml-3 mb-0 p-1`;
+    alert.style.width="max-content";
     alert.textContent = message;
-    firstCardBody.appendChild(alert);
+    btnMsgGroup.appendChild(alert);
     setTimeout(function() {
         alert.remove();
     }, 2000);
